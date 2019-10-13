@@ -8,9 +8,11 @@ export default new Vuex.Store({
   state: {
 
   },
+
   mutations: {
 
   },
+
   actions: {
     async getSprints () {
       await db.collection('sprints').get()
