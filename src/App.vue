@@ -18,6 +18,14 @@
 
         <VIcon>mdi-open-in-new</VIcon>
       </VBtn>
+
+      <VAvatar
+        color="blue"
+        tile>
+        <VIcon dark>
+          mdi-alarm
+        </VIcon>
+      </VAvatar>
     </VAppBar>
 
     <VContent>
