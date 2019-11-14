@@ -26,8 +26,8 @@ jobs:
     - name: Archive Production Artifact
       uses: actions/upload-artifact@master
       with:
-        name: project
-        path: .
+        name: dist
+        path: dist
      
   deploy:
     name: Deploy
@@ -40,7 +40,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: project
+          name: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
