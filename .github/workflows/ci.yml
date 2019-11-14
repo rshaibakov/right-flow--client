@@ -8,15 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
       with:
         node-version: '10.x'
     - name: Install
-      run: |
-        yarn
-        cd ./functions
-        yarn
+      run: yarn
     - name: Lint
       run: yarn lint
     - name: Test
@@ -34,8 +31,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+            node-version: '10.x'
+      - name: Install Firebase Functions
+        run: |
+          cd ./functions
+          yarn
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
