@@ -1,8 +1,5 @@
-name: Build and Deploy
-on:
-  push:
-    branches:
-      - master
+name: CI
+on: [push]
 
 jobs:
   build:
@@ -14,11 +11,11 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '10.x'
     - name: Install
       run: |
         yarn
-        cd functions
+        cd ./functions
         yarn
     - name: Lint
       run: yarn lint
@@ -29,11 +26,12 @@ jobs:
     - name: Archive Production Artifact
       uses: actions/upload-artifact@master
       with:
-        name: project
-        path: .
-      
+        name: dist
+        path: dist
+     
   deploy:
     name: Deploy
+    if: github.base_ref == 'master'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -42,7 +40,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: project
+          name: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
