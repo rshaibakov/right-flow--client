@@ -1,8 +1,5 @@
-name: Build and Deploy
-on:
-  push:
-    branches:
-      - master
+name: CI
+on: [push]
 
 jobs:
   build:
@@ -18,7 +15,7 @@ jobs:
     - name: Install
       run: |
         yarn
-        cd functions
+        cd ./functions
         yarn
     - name: Lint
       run: yarn lint
@@ -31,9 +28,10 @@ jobs:
       with:
         name: project
         path: .
-      
+     
   deploy:
     name: Deploy
+    if: github.base_ref == 'master'
     needs: build
     runs-on: ubuntu-latest
     steps:
