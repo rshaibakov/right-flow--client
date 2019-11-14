@@ -31,7 +31,6 @@ jobs:
      
   deploy:
     name: Deploy
-    if: github.base_ref == 'master'
     needs: build
     runs-on: ubuntu-latest
     steps:
