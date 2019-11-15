@@ -16,7 +16,7 @@ jobs:
         path: node_modaules
         key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
     - name: Install
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != true
       run: yarn
     - name: Lint
       run: yarn lint
@@ -37,7 +37,7 @@ jobs:
         path: node_modaules
         key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
     - name: Install
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != true
       run: yarn
     - name: Build
       run: yarn build
