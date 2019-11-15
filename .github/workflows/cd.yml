@@ -1,12 +1,33 @@
 name: CD
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches:    
+      - master 
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@master
+      with:
+        node-version: '10.x'
+    - uses: actions/cache@v1
+      id: cache
+      with:
+        path: node_modaules
+        key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+    - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: yarn
+    - name: Lint
+      run: yarn lint
+    - name: Test
+      run: yarn test:unit
+
   build:
     name: Build
-    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -31,8 +52,7 @@ jobs:
      
   deploy:
     name: Deploy
-    needs: build
-    if: success() && github.event.pull_request.merged == 'true'
+    needs: [test, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
