@@ -4,16 +4,21 @@ on: [pull_request]
 jobs:
   test:
     name: Test
-    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@master
       with:
         node-version: '10.x'
+    - uses: actions/cache@v1
+      id: cache
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
     - name: Install
-      run: echo ${{ github.event.pull_request.merged }}
+      run: echo ${{ toJson(github) }}
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: yarn
     - name: Lint
       run: yarn lint
