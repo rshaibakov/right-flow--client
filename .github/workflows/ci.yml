@@ -1,9 +1,10 @@
 name: CI
-on: [pull_request]
+on: [push]
 
 jobs:
   test:
     name: Test
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -11,8 +12,6 @@ jobs:
       with:
         node-version: '10.x'
     - name: Install
-      env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
     - name: Install
       run: yarn
