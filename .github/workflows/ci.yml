@@ -4,7 +4,7 @@ on: [push]
 jobs:
   test:
     name: Test
-    if: github.event.pull_request.merged == 'false'
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -30,6 +30,7 @@ jobs:
     
   build:
     name: Build
+    if: (github.event.pull_request.merged == false && success()) || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
