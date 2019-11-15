@@ -11,31 +11,44 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: '10.x'
-    - name: Install
+    - name: Echo
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
+    - uses: actions/cache@v1
+      id: cache
+      with:
+        path: node_modaules
+        key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: yarn
     - name: Lint
       run: yarn lint
     - name: Test
       run: yarn test:unit
-    - name: Build
-      run: yarn build
     
   build:
     name: Build
-    if: github.event.pull_request.merged == true
+    if: (github.event.pull_request.merged == false && success()) || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@master
       with:
         node-version: '10.x'
+    - uses: actions/cache@v1
+      id: cache
+      with:
+        path: node_modaules
+        key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: yarn
     - name: Build
       run: yarn build
     - name: Archive Production Artifact
+      if: github.event.pull_request.merged == 'true'
       uses: actions/upload-artifact@master
       with:
         name: dist
@@ -44,7 +57,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
-    if: success() && github.event.pull_request.merged == true
+    if: success() && github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
