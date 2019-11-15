@@ -4,9 +4,7 @@ on: [push]
 jobs:
   build:
     name: Build
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@master
@@ -29,6 +27,7 @@ jobs:
   deploy:
     name: Deploy
     needs: build
+    if: success() && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
