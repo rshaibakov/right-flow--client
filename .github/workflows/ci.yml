@@ -11,7 +11,7 @@ jobs:
       with:
         node-version: '10.x'
     - name: Install
-      run: echo ${{ toJson(github) }}
+      run: ${{ toJson(github) }}
     - name: Install
       run: yarn
     - name: Lint
