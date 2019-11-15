@@ -4,7 +4,6 @@ on: [pull_request]
 jobs:
   test:
     name: Test
-    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -12,7 +11,9 @@ jobs:
       with:
         node-version: '10.x'
     - name: Install
-      run: echo ${{ github.event.pull_request.merged }}
+      env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
     - name: Install
       run: yarn
     - name: Lint
