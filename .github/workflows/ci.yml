@@ -13,8 +13,8 @@ jobs:
     - uses: actions/cache@v1
       id: cache
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+        path: node_modules
+        key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
     - name: Install
       run: echo ${{ toJson(github) }}
     - name: Install
